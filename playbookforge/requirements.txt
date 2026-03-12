@@ -1,0 +1,24 @@
+# PlaybookForge - Dependencies
+# Core
+pydantic>=2.5.0
+fastapi>=0.109.0
+uvicorn>=0.27.0
+pyyaml>=6.0.1
+jsonschema>=4.20.0
+
+# LLM (httpx is shared with test deps below)
+
+# Database (future)
+# sqlalchemy>=2.0.0
+# aiosqlite>=0.19.0
+
+# PDF generation
+reportlab>=4.0.0
+
+# File uploads
+python-multipart>=0.0.6
+
+# Development
+pytest>=7.4.0
+pytest-asyncio>=0.23.0
+httpx>=0.26.0

@@ -1,0 +1,234 @@
+{
+  "type": "playbook",
+  "spec_version": "cacao-2.0",
+  "id": "playbook--88fe2d32-2514-46e5-8f25-83af42240a59",
+  "name": "Phishing Email Investigation & Response",
+  "description": "Automated investigation and response workflow for reported phishing emails. Extracts IOCs, checks reputation, and takes containment actions.",
+  "playbook_types": [
+    "investigation",
+    "mitigation",
+    "remediation"
+  ],
+  "playbook_activities": [
+    "identify-iocs",
+    "match-indicators",
+    "contain-system"
+  ],
+  "created_by": "identity--676becc0-7756-4056-a890-4fb144bc5ab2",
+  "created": "2026-02-09T19:26:21.641Z",
+  "modified": "2026-02-09T19:26:21.641Z",
+  "revoked": false,
+  "priority": 2,
+  "severity": 75,
+  "impact": 60,
+  "industry_sectors": [
+    "aviation"
+  ],
+  "labels": [
+    "phishing",
+    "email-security",
+    "automated"
+  ],
+  "external_references": [
+    {
+      "name": "MITRE ATT&CK - T1566.001",
+      "source": "MITRE ATT&CK",
+      "url": "https://attack.mitre.org/techniques/T1566/001/",
+      "description": "Spearphishing Attachment"
+    },
+    {
+      "name": "MITRE ATT&CK - T1566.002",
+      "source": "MITRE ATT&CK",
+      "url": "https://attack.mitre.org/techniques/T1566/002/",
+      "description": "Spearphishing Link"
+    },
+    {
+      "name": "MITRE ATT&CK - T1204.001",
+      "source": "MITRE ATT&CK",
+      "url": "https://attack.mitre.org/techniques/T1204/001/",
+      "description": "User Execution: Malicious Link"
+    }
+  ],
+  "workflow_start": "start--8382dfdb-c5b9-492b-a559-74adeb9356ca",
+  "workflow": {
+    "action--d90d67dc-7c6d-4572-91c4-ead8082762ef": {
+      "type": "action",
+      "name": "Extract Email Metadata",
+      "description": "Parse email headers, extract sender, recipient, subject, SPF/DKIM/DMARC results",
+      "on_completion": "action--d9505917-ded1-4aee-8efe-592d1e91a67f",
+      "commands": [
+        {
+          "type": "http-api",
+          "command": "GET /api/v1/email/parse?id=$$email_id$$",
+          "description": "Parse email and extract metadata"
+        }
+      ],
+      "playbook_activity": "identify-iocs"
+    },
+    "action--d9505917-ded1-4aee-8efe-592d1e91a67f": {
+      "type": "action",
+      "name": "Extract IOCs",
+      "description": "Extract URLs, domains, IP addresses, and file hashes from email body and attachments",
+      "on_completion": "action--3741a69e-b82e-4a63-bc2c-c530c2f6aa22",
+      "commands": [
+        {
+          "type": "http-api",
+          "command": "POST /api/v1/ioc/extract",
+          "description": "Extract all IOCs from email content",
+          "content": "{\"email_id\": \"$$email_id$$\"}"
+        }
+      ],
+      "playbook_activity": "identify-iocs"
+    },
+    "action--3741a69e-b82e-4a63-bc2c-c530c2f6aa22": {
+      "type": "action",
+      "name": "Check URL Reputation",
+      "description": "Query VirusTotal, URLScan.io, and internal threat intelligence for URL reputation",
+      "on_completion": "action--f9fde2cd-77e7-4336-8bbd-0ffd17e19606",
+      "commands": [
+        {
+          "type": "http-api",
+          "command": "POST /api/v1/reputation/url",
+          "description": "Multi-source URL reputation check",
+          "content": "{\"urls\": \"$$malicious_urls$$\"}"
+        }
+      ],
+      "playbook_activity": "match-indicators"
+    },
+    "action--f9fde2cd-77e7-4336-8bbd-0ffd17e19606": {
+      "type": "action",
+      "name": "Check Sender Reputation",
+      "description": "Verify sender domain age, WHOIS data, and historical email patterns",
+      "on_completion": "if-condition--9e883947-9d28-480c-b0b7-8a8a9d3831a6",
+      "commands": [
+        {
+          "type": "http-api",
+          "command": "POST /api/v1/reputation/sender",
+          "description": "Sender reputation analysis",
+          "content": "{\"sender\": \"$$sender_address$$\"}"
+        }
+      ],
+      "playbook_activity": "match-indicators"
+    },
+    "if-condition--9e883947-9d28-480c-b0b7-8a8a9d3831a6": {
+      "type": "if-condition",
+      "name": "Is Email Malicious?",
+      "description": "Decision point based on aggregated threat intelligence results",
+      "condition": "$$verdict$$ == 'malicious'",
+      "on_true": "action--f8a6bf2c-61a5-4ded-b158-b985d48895b2",
+      "on_false": "action--2abab70c-bad8-4a9f-8f80-c45b0200b153"
+    },
+    "action--f8a6bf2c-61a5-4ded-b158-b985d48895b2": {
+      "type": "action",
+      "name": "Block Sender Domain",
+      "description": "Add sender domain to email gateway blocklist and firewall deny list",
+      "on_completion": "action--c69bda88-fff7-4bd3-8752-bf38b1382ecb",
+      "commands": [
+        {
+          "type": "http-api",
+          "command": "POST /api/v1/blocklist/domain",
+          "description": "Block sender domain on email gateway",
+          "content": "{\"domain\": \"$$sender_address$$\", \"source\": \"phishing-investigation\"}"
+        }
+      ],
+      "playbook_activity": "deny-activity"
+    },
+    "action--c69bda88-fff7-4bd3-8752-bf38b1382ecb": {
+      "type": "action",
+      "name": "Search for Other Recipients",
+      "description": "Search email logs for other employees who received the same email",
+      "on_completion": "action--740efb17-b264-4eae-b026-9305cdffc73f",
+      "commands": [
+        {
+          "type": "http-api",
+          "command": "POST /api/v1/email/search",
+          "description": "Find all recipients of the phishing campaign",
+          "content": "{\"sender\": \"$$sender_address$$\", \"timeframe\": \"7d\"}"
+        }
+      ],
+      "playbook_activity": "investigate-system"
+    },
+    "action--740efb17-b264-4eae-b026-9305cdffc73f": {
+      "type": "action",
+      "name": "Delete Phishing Emails",
+      "description": "Purge the phishing email from all recipients mailboxes",
+      "on_completion": "action--a7b560cb-d1ed-48f5-915b-9ca34b213225",
+      "commands": [
+        {
+          "type": "http-api",
+          "command": "POST /api/v1/email/purge",
+          "description": "Organization-wide email purge",
+          "content": "{\"email_id\": \"$$email_id$$\", \"scope\": \"organization\"}"
+        }
+      ],
+      "playbook_activity": "contain-system"
+    },
+    "action--a7b560cb-d1ed-48f5-915b-9ca34b213225": {
+      "type": "action",
+      "name": "Notify SOC Team Lead",
+      "description": "Send notification to SOC Team Lead with investigation summary and actions taken",
+      "on_completion": "action--2abab70c-bad8-4a9f-8f80-c45b0200b153",
+      "commands": [
+        {
+          "type": "manual",
+          "command": "Send email notification to SOC Team Lead with phishing incident summary"
+        }
+      ]
+    },
+    "action--2abab70c-bad8-4a9f-8f80-c45b0200b153": {
+      "type": "action",
+      "name": "Update Case Status",
+      "description": "Update the incident ticket with investigation findings and close if clean",
+      "on_completion": "end--d1eee450-f11a-4689-934a-8afb60b4eda1",
+      "commands": [
+        {
+          "type": "http-api",
+          "command": "PATCH /api/v1/case/update",
+          "description": "Update incident case with findings",
+          "content": "{\"verdict\": \"$$verdict$$\", \"severity\": \"$$severity_score$$\"}"
+        }
+      ]
+    },
+    "start--8382dfdb-c5b9-492b-a559-74adeb9356ca": {
+      "type": "start",
+      "name": "Start",
+      "on_completion": "action--d90d67dc-7c6d-4572-91c4-ead8082762ef"
+    },
+    "end--d1eee450-f11a-4689-934a-8afb60b4eda1": {
+      "type": "end",
+      "name": "End"
+    }
+  },
+  "playbook_variables": {
+    "email_id": {
+      "type": "string",
+      "description": "The ID of the reported phishing email",
+      "constant": false,
+      "external": true
+    },
+    "sender_address": {
+      "type": "string",
+      "description": "Extracted sender email address",
+      "constant": false,
+      "external": false
+    },
+    "malicious_urls": {
+      "type": "list",
+      "description": "List of malicious URLs found in the email",
+      "constant": false,
+      "external": false
+    },
+    "verdict": {
+      "type": "string",
+      "description": "Final verdict: malicious, suspicious, or clean",
+      "constant": false,
+      "external": false
+    },
+    "severity_score": {
+      "type": "integer",
+      "description": "Calculated severity score (0-100)",
+      "constant": false,
+      "external": false
+    }
+  }
+}

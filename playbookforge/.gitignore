@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+*.whl
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Node / Frontend
+node_modules/
+.next/
+out/
+.turbo/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# Demo output
+demo_output/
+
+# Docker
+.docker/
+
+# Misc
+*.log
+*.bak
+*.tmp

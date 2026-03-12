@@ -1,0 +1,211 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #0a0f0a;
+  --bg-secondary: #111a11;
+  --bg-card: #0f1a0f;
+  --border: #1a2e1a;
+  --border-highlight: #2a3e2a;
+  --text-primary: #d4d4c8;
+  --text-secondary: #7a7a6a;
+  --accent: #f59e0b;
+  --accent-hover: #d97706;
+  --accent-muted: #f59e0b33;
+  --success: #22c55e;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  --info: #06b6d4;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+  position: relative;
+}
+
+/* Scanline / grid background effect */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(10, 15, 10, 0.03) 2px,
+      rgba(10, 15, 10, 0.03) 4px
+    );
+  mix-blend-mode: overlay;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+  background-image:
+    linear-gradient(rgba(26, 46, 26, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26, 46, 26, 0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Tactical scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-highlight);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Tactical code blocks */
+pre {
+  background: #080d08 !important;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 1rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+  color: var(--text-primary);
+}
+
+pre:hover {
+  border-color: var(--border-highlight);
+}
+
+code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+}
+
+/* Tactical platform cards */
+.platform-card {
+  @apply border rounded-sm p-4 cursor-pointer transition-all;
+  background-color: var(--bg-card);
+  border-color: var(--border);
+}
+.platform-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.1), inset 0 0 12px rgba(245, 158, 11, 0.03);
+}
+.platform-card.selected {
+  border-color: var(--accent);
+  background-color: var(--accent-muted);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.15);
+}
+
+/* Tactical section labels */
+.section-label {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Tactical input fields */
+input, textarea, select {
+  background-color: var(--bg-primary) !important;
+  border-color: var(--border) !important;
+  border-radius: 2px !important;
+  color: var(--text-primary) !important;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 1px var(--accent-muted) !important;
+}
+
+/* Primary gradient button */
+.btn-primary {
+  @apply px-5 py-2.5 text-sm font-bold rounded uppercase tracking-wider transition-all;
+  background: linear-gradient(135deg, #f59e0b, #d97706, #b45309);
+  color: #0a0f0a;
+  border: none;
+  box-shadow: 0 2px 12px rgba(245, 158, 11, 0.25);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 8px rgba(245, 158, 11, 0.2);
+}
+
+/* Secondary outlined button */
+.btn-secondary {
+  @apply px-5 py-2.5 text-sm font-bold rounded uppercase tracking-wider transition-all;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-highlight);
+}
+.btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(245, 158, 11, 0.05);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.1);
+}
+
+/* Ghost/subtle button */
+.btn-ghost {
+  @apply px-4 py-2 text-xs font-semibold rounded uppercase tracking-wider transition-all;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid transparent;
+}
+.btn-ghost:hover {
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  border-color: var(--border);
+}
+
+/* Keep old class as alias */
+.btn-tactical {
+  @apply px-5 py-2.5 text-sm font-bold rounded uppercase tracking-wider transition-all;
+  background: linear-gradient(135deg, #f59e0b, #d97706, #b45309);
+  color: #0a0f0a;
+  border: none;
+  box-shadow: 0 2px 12px rgba(245, 158, 11, 0.25);
+}
+.btn-tactical:hover {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Hide scrollbar for nav overflow */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Selection highlight */
+::selection {
+  background-color: rgba(245, 158, 11, 0.3);
+  color: var(--text-primary);
+}
