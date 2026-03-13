@@ -1,0 +1,170 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "title": "Phishing Email Investigation & Response",
+    "description": "Automated investigation and response workflow for reported phishing emails. Extracts IOCs, checks reputation, and takes containment actions.",
+    "prerequisites": "Required: Microsoft Sentinel enabled workspace",
+    "lastUpdateTime": "2026-03-12T14:00:00.000Z",
+    "tags": [
+      "phishing",
+      "email-security",
+      "automated"
+    ],
+    "source": {
+      "kind": "Community",
+      "name": "PlaybookForge"
+    },
+    "support": {
+      "tier": "Community"
+    },
+    "_playbookforge": {
+      "source_format": "cacao-2.0",
+      "source_id": "playbook--a]1b2c3d4-e5f6-7890-abcd-ef1234567890"
+    }
+  },
+  "parameters": {
+    "PlaybookName": {
+      "defaultValue": "phishing-email-investigation-&-response",
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Logic App / Playbook"
+      }
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Logic/workflows",
+      "apiVersion": "2017-07-01",
+      "name": "[parameters('PlaybookName')]",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "hidden-SentinelTemplateName": "phishing-email-investigation-&-response",
+        "hidden-SentinelTemplateVersion": "1.0"
+      },
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "state": "Enabled",
+        "definition": {
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {},
+          "triggers": {
+            "Microsoft_Sentinel_incident": {
+              "type": "ApiConnectionWebhook",
+              "inputs": {
+                "body": {
+                  "callback_url": "@{listCallbackUrl()}"
+                },
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                  }
+                },
+                "path": "/incident-creation"
+              }
+            }
+          },
+          "actions": {
+            "Extract_Email_Metadata": {
+              "type": "Compose",
+              "inputs": "Parse the reported email to extract sender, subject, headers, and body content.",
+              "runAfter": {},
+              "description": "Parse the reported email to extract sender, subject, headers, and body content."
+            },
+            "Extract_IOCs": {
+              "type": "Compose",
+              "inputs": "Identify and extract all indicators of compromise from the email body and attachments.",
+              "runAfter": {
+                "Extract_Email_Metadata": [
+                  "Succeeded"
+                ]
+              },
+              "description": "Identify and extract all indicators of compromise from the email body and attachments."
+            },
+            "Check_URL_Reputation": {
+              "type": "Compose",
+              "inputs": "Query threat intelligence platforms to check reputation of extracted URLs.",
+              "runAfter": {
+                "Extract_IOCs": [
+                  "Succeeded"
+                ]
+              },
+              "description": "Query threat intelligence platforms to check reputation of extracted URLs."
+            },
+            "Check_Sender_Reputation": {
+              "type": "Compose",
+              "inputs": "Verify the sender address against known malicious sender databases.",
+              "runAfter": {
+                "Check_URL_Reputation": [
+                  "Succeeded"
+                ]
+              },
+              "description": "Verify the sender address against known malicious sender databases."
+            },
+            "Is_Email_Malicious": {
+              "type": "If",
+              "expression": {
+                "and": [
+                  {
+                    "not": {
+                      "equals": [
+                        "@{variables('verdict == 'malicious'')}",
+                        ""
+                      ]
+                    }
+                  }
+                ]
+              },
+              "actions": {},
+              "else": {
+                "actions": {}
+              },
+              "runAfter": {
+                "Check_Sender_Reputation": [
+                  "Succeeded"
+                ]
+              },
+              "description": "Evaluate gathered intelligence to determine if the email is malicious."
+            },
+            "Block_Sender_Domain": {
+              "type": "Compose",
+              "inputs": "Add the sender's domain to the email gateway blocklist.",
+              "runAfter": {
+                "Is_Email_Malicious": [
+                  "Succeeded"
+                ]
+              },
+              "description": "Add the sender's domain to the email gateway blocklist."
+            },
+            "Search_for_Other_Recipients": {
+              "type": "Compose",
+              "inputs": "Search mail logs to identify other employees who received the same phishing email.",
+              "runAfter": {
+                "Block_Sender_Domain": [
+                  "Succeeded"
+                ]
+              },
+              "description": "Search mail logs to identify other employees who received the same phishing email."
+            },
+            "Delete_Phishing_Emails": {
+              "type": "Compose",
+              "inputs": "Purge all instances of the phishing email from user mailboxes.",
+              "runAfter": {
+                "Search_for_Other_Recipients": [
+                  "Succeeded"
+                ]
+              },
+              "description": "Purge all instances of the phishing email from user mailboxes."
+            }
+          },
+          "outputs": {}
+        },
+        "parameters": {}
+      }
+    }
+  ]
+}

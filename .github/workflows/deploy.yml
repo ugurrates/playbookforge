@@ -1,0 +1,41 @@
+name: Deploy Playbook Exports
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'playbooks/**/*.json'
+
+jobs:
+  export-and-commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pydantic pyyaml fastapi jsonschema
+
+      - name: Export all playbooks
+        run: python scripts/export_all.py
+
+      - name: Commit and push exports
+        run: |
+          git config user.name "PlaybookForge CI"
+          git config user.email "ci@playbookforge.dev"
+          git add exports/
+          if git diff --staged --quiet; then
+            echo "No export changes to commit."
+          else
+            git commit -m "ci: update platform exports"
+            git push
+          fi

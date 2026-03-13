@@ -1,0 +1,358 @@
+{
+  "name": "Phishing Email Investigation & Response",
+  "description": "Automated investigation and response workflow for reported phishing emails. Extracts IOCs, checks reputation, and takes containment actions.",
+  "id": "4c69bbb1-4806-4e73-8e32-2ada041093b8",
+  "start": "a7772e28-9998-490b-a816-272dfae4e4a6",
+  "org_id": "",
+  "status": "test",
+  "is_valid": true,
+  "actions": [
+    {
+      "id": "ba546548-7698-4f4c-be5d-8f3b44697ebd",
+      "app_name": "Shuffle Tools",
+      "app_version": "1.0.0",
+      "app_id": "",
+      "name": "send_email_shuffle",
+      "label": "Extract Email Metadata",
+      "description": "Parse the reported email to extract sender, subject, headers, and body content.",
+      "environment": "Shuffle",
+      "is_start_node": false,
+      "position": {
+        "x": 100,
+        "y": 250
+      },
+      "parameters": [
+        {
+          "name": "body",
+          "value": "Extract email headers, sender address, subject line, and body content from the reported phishing email."
+        }
+      ],
+      "errors": [],
+      "large_image": ""
+    },
+    {
+      "id": "be9344d7-ddc1-42c8-8e6d-f7b083ff0983",
+      "app_name": "Shuffle Tools",
+      "app_version": "1.0.0",
+      "app_id": "",
+      "name": "send_email_shuffle",
+      "label": "Extract IOCs",
+      "description": "Identify and extract all indicators of compromise from the email body and attachments.",
+      "environment": "Shuffle",
+      "is_start_node": false,
+      "position": {
+        "x": 100,
+        "y": 400
+      },
+      "parameters": [
+        {
+          "name": "body",
+          "value": "Extract URLs, IP addresses, domain names, and file hashes from the email content and attachments."
+        }
+      ],
+      "errors": [],
+      "large_image": ""
+    },
+    {
+      "id": "40d38ba6-7a35-4f85-aa71-9b58bf627f06",
+      "app_name": "Shuffle Tools",
+      "app_version": "1.0.0",
+      "app_id": "",
+      "name": "send_email_shuffle",
+      "label": "Check URL Reputation",
+      "description": "Query threat intelligence platforms to check reputation of extracted URLs.",
+      "environment": "Shuffle",
+      "is_start_node": false,
+      "position": {
+        "x": 100,
+        "y": 550
+      },
+      "parameters": [
+        {
+          "name": "body",
+          "value": "Submit extracted URLs to VirusTotal and URLhaus for reputation scoring."
+        }
+      ],
+      "errors": [],
+      "large_image": ""
+    },
+    {
+      "id": "42c1ef61-6a86-466c-bf08-b28077f9ba1a",
+      "app_name": "Shuffle Tools",
+      "app_version": "1.0.0",
+      "app_id": "",
+      "name": "send_email_shuffle",
+      "label": "Check Sender Reputation",
+      "description": "Verify the sender address against known malicious sender databases.",
+      "environment": "Shuffle",
+      "is_start_node": false,
+      "position": {
+        "x": 100,
+        "y": 700
+      },
+      "parameters": [
+        {
+          "name": "body",
+          "value": "Check sender address against internal blocklist and external threat feeds."
+        }
+      ],
+      "errors": [],
+      "large_image": ""
+    },
+    {
+      "id": "83408f8b-eaab-447b-b98b-a5d9fcedfd3c",
+      "app_name": "Shuffle Tools",
+      "app_version": "1.2.0",
+      "app_id": "",
+      "name": "filter_list",
+      "label": "Is Email Malicious?",
+      "description": "Evaluate gathered intelligence to determine if the email is malicious.",
+      "environment": "Shuffle",
+      "is_start_node": false,
+      "position": {
+        "x": 100,
+        "y": 850
+      },
+      "parameters": [
+        {
+          "name": "input_list",
+          "value": "verdict == 'malicious'",
+          "description": "Condition expression from CACAO"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "id": "baf03653-ac9e-46f1-95a8-9d006eea5ae2",
+      "app_name": "Shuffle Tools",
+      "app_version": "1.0.0",
+      "app_id": "",
+      "name": "send_email_shuffle",
+      "label": "Block Sender Domain",
+      "description": "Add the sender's domain to the email gateway blocklist.",
+      "environment": "Shuffle",
+      "is_start_node": false,
+      "position": {
+        "x": 100,
+        "y": 1000
+      },
+      "parameters": [
+        {
+          "name": "body",
+          "value": "Add sender domain to Exchange Online / email gateway blocklist."
+        }
+      ],
+      "errors": [],
+      "large_image": ""
+    },
+    {
+      "id": "3b149eb5-cfed-4d88-b187-d34d8bfcaedd",
+      "app_name": "Shuffle Tools",
+      "app_version": "1.0.0",
+      "app_id": "",
+      "name": "send_email_shuffle",
+      "label": "Search for Other Recipients",
+      "description": "Search mail logs to identify other employees who received the same phishing email.",
+      "environment": "Shuffle",
+      "is_start_node": false,
+      "position": {
+        "x": 100,
+        "y": 1150
+      },
+      "parameters": [
+        {
+          "name": "body",
+          "value": "Query email logs for messages from the same sender with matching subject line."
+        }
+      ],
+      "errors": [],
+      "large_image": ""
+    },
+    {
+      "id": "d19ce2f5-15a3-4919-a9f7-977963865a0f",
+      "app_name": "Shuffle Tools",
+      "app_version": "1.0.0",
+      "app_id": "",
+      "name": "send_email_shuffle",
+      "label": "Delete Phishing Emails",
+      "description": "Purge all instances of the phishing email from user mailboxes.",
+      "environment": "Shuffle",
+      "is_start_node": false,
+      "position": {
+        "x": 100,
+        "y": 1300
+      },
+      "parameters": [
+        {
+          "name": "body",
+          "value": "Execute compliance search and purge action to remove phishing emails from all mailboxes."
+        }
+      ],
+      "errors": [],
+      "large_image": ""
+    },
+    {
+      "id": "3cc4ce6f-065f-498b-865c-175c0c6dd1f6",
+      "app_name": "Shuffle Tools",
+      "app_version": "1.0.0",
+      "app_id": "",
+      "name": "send_email_shuffle",
+      "label": "Update Case - Benign",
+      "description": "Mark the case as benign and notify the reporter.",
+      "environment": "Shuffle",
+      "is_start_node": false,
+      "position": {
+        "x": 100,
+        "y": 1450
+      },
+      "parameters": [
+        {
+          "name": "body",
+          "value": "Update case status to 'Benign' and send notification to the original reporter."
+        }
+      ],
+      "errors": [],
+      "large_image": ""
+    },
+    {
+      "id": "07cb2caa-bacf-419d-ae9e-79c052f41b45",
+      "app_name": "Shuffle Tools",
+      "app_version": "1.2.0",
+      "app_id": "",
+      "name": "End Playbook",
+      "label": "End Playbook",
+      "environment": "Shuffle",
+      "is_start_node": false,
+      "position": {
+        "x": 100,
+        "y": 1600
+      },
+      "parameters": [],
+      "errors": [],
+      "large_image": ""
+    }
+  ],
+  "triggers": [
+    {
+      "id": "a7772e28-9998-490b-a816-272dfae4e4a6",
+      "name": "Start Playbook",
+      "description": "Workflow trigger",
+      "trigger_type": "WEBHOOK",
+      "status": "running",
+      "label": "Start Playbook",
+      "position": {
+        "x": 100,
+        "y": 100
+      },
+      "parameters": [],
+      "environment": "Shuffle",
+      "is_valid": true
+    }
+  ],
+  "branches": [
+    {
+      "id": "0a225dcb-6455-4891-ab77-2615f70c74e8",
+      "source_id": "a7772e28-9998-490b-a816-272dfae4e4a6",
+      "destination_id": "ba546548-7698-4f4c-be5d-8f3b44697ebd",
+      "label": "",
+      "has_errors": false
+    },
+    {
+      "id": "f7a84bf7-aaa5-42b4-aaa7-de69d195d97d",
+      "source_id": "ba546548-7698-4f4c-be5d-8f3b44697ebd",
+      "destination_id": "be9344d7-ddc1-42c8-8e6d-f7b083ff0983",
+      "label": "",
+      "has_errors": false
+    },
+    {
+      "id": "444c7cd1-0306-4e11-a844-bbb5855bf40f",
+      "source_id": "be9344d7-ddc1-42c8-8e6d-f7b083ff0983",
+      "destination_id": "40d38ba6-7a35-4f85-aa71-9b58bf627f06",
+      "label": "",
+      "has_errors": false
+    },
+    {
+      "id": "24d6ee58-a3dd-4d41-98cb-cb4c02337378",
+      "source_id": "40d38ba6-7a35-4f85-aa71-9b58bf627f06",
+      "destination_id": "42c1ef61-6a86-466c-bf08-b28077f9ba1a",
+      "label": "",
+      "has_errors": false
+    },
+    {
+      "id": "59592902-4b1d-4551-a351-13076d9ff074",
+      "source_id": "42c1ef61-6a86-466c-bf08-b28077f9ba1a",
+      "destination_id": "83408f8b-eaab-447b-b98b-a5d9fcedfd3c",
+      "label": "",
+      "has_errors": false
+    },
+    {
+      "id": "18ba9f95-2534-484f-8d2e-80eeae9f7993",
+      "source_id": "83408f8b-eaab-447b-b98b-a5d9fcedfd3c",
+      "destination_id": "baf03653-ac9e-46f1-95a8-9d006eea5ae2",
+      "label": "true",
+      "has_errors": false,
+      "conditions": [
+        {
+          "condition": {
+            "value": "verdict == 'malicious'"
+          },
+          "source": {
+            "id": "83408f8b-eaab-447b-b98b-a5d9fcedfd3c"
+          },
+          "destination": {
+            "id": "baf03653-ac9e-46f1-95a8-9d006eea5ae2"
+          }
+        }
+      ]
+    },
+    {
+      "id": "eb83e796-c506-49fa-8d5e-e0df588e86c2",
+      "source_id": "83408f8b-eaab-447b-b98b-a5d9fcedfd3c",
+      "destination_id": "3cc4ce6f-065f-498b-865c-175c0c6dd1f6",
+      "label": "false",
+      "has_errors": false
+    },
+    {
+      "id": "0439d81c-be4e-4300-96b3-7587b7684d21",
+      "source_id": "baf03653-ac9e-46f1-95a8-9d006eea5ae2",
+      "destination_id": "3b149eb5-cfed-4d88-b187-d34d8bfcaedd",
+      "label": "",
+      "has_errors": false
+    },
+    {
+      "id": "b240ab01-fdf4-4984-b856-be1fbadb3471",
+      "source_id": "3b149eb5-cfed-4d88-b187-d34d8bfcaedd",
+      "destination_id": "d19ce2f5-15a3-4919-a9f7-977963865a0f",
+      "label": "",
+      "has_errors": false
+    },
+    {
+      "id": "f87e0231-8572-4900-a6ff-d2fc70496946",
+      "source_id": "d19ce2f5-15a3-4919-a9f7-977963865a0f",
+      "destination_id": "07cb2caa-bacf-419d-ae9e-79c052f41b45",
+      "label": "",
+      "has_errors": false
+    },
+    {
+      "id": "e5d4bf82-2351-4177-bc4a-7eee9b1ffb60",
+      "source_id": "3cc4ce6f-065f-498b-865c-175c0c6dd1f6",
+      "destination_id": "07cb2caa-bacf-419d-ae9e-79c052f41b45",
+      "label": "",
+      "has_errors": false
+    }
+  ],
+  "workflow_variables": [],
+  "tags": [
+    "phishing",
+    "email-security",
+    "automated"
+  ],
+  "default_return_value": "",
+  "execution_environment": "Shuffle",
+  "previously_saved": false,
+  "_playbookforge_metadata": {
+    "source_format": "cacao-2.0",
+    "source_id": "playbook--a]1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "converter": "PlaybookForge"
+  }
+}

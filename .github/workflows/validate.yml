@@ -1,0 +1,37 @@
+name: Validate Playbooks
+
+on:
+  pull_request:
+    paths:
+      - 'playbooks/**/*.json'
+
+jobs:
+  validate-and-export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pydantic pyyaml fastapi jsonschema
+
+      - name: Validate all playbooks
+        run: python scripts/validate_all.py
+
+      - name: Export changed playbooks
+        run: python scripts/export_changed.py
+
+      - name: Upload export artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playbook-exports
+          path: exports/
+          if-no-files-found: ignore

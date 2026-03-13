@@ -1,0 +1,133 @@
+{
+  "type": "playbook",
+  "spec_version": "cacao-2.0",
+  "id": "playbook--a]1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "name": "Phishing Email Investigation & Response",
+  "description": "Automated investigation and response workflow for reported phishing emails. Extracts IOCs, checks reputation, and takes containment actions.",
+  "playbook_types": ["investigation", "mitigation", "remediation"],
+  "playbook_activities": ["identify-iocs", "match-indicators", "contain-system"],
+  "created_by": "identity--f1a773d0-81c4-4a9e-8e41-bb5c3a2f0e01",
+  "created": "2025-06-15T10:30:00.000Z",
+  "modified": "2026-03-12T14:00:00.000Z",
+  "priority": 2,
+  "severity": 75,
+  "impact": 60,
+  "industry_sectors": ["aviation"],
+  "labels": ["phishing", "email-security", "automated"],
+  "workflow_start": "step--start",
+  "workflow": {
+    "step--start": {
+      "type": "start",
+      "name": "Start Playbook",
+      "on_completion": "step--extract-metadata"
+    },
+    "step--extract-metadata": {
+      "type": "action",
+      "name": "Extract Email Metadata",
+      "description": "Parse the reported email to extract sender, subject, headers, and body content.",
+      "commands": [
+        {
+          "type": "manual",
+          "command": "Extract email headers, sender address, subject line, and body content from the reported phishing email."
+        }
+      ],
+      "on_completion": "step--extract-iocs"
+    },
+    "step--extract-iocs": {
+      "type": "action",
+      "name": "Extract IOCs",
+      "description": "Identify and extract all indicators of compromise from the email body and attachments.",
+      "commands": [
+        {
+          "type": "manual",
+          "command": "Extract URLs, IP addresses, domain names, and file hashes from the email content and attachments."
+        }
+      ],
+      "on_completion": "step--check-url-reputation"
+    },
+    "step--check-url-reputation": {
+      "type": "action",
+      "name": "Check URL Reputation",
+      "description": "Query threat intelligence platforms to check reputation of extracted URLs.",
+      "commands": [
+        {
+          "type": "manual",
+          "command": "Submit extracted URLs to VirusTotal and URLhaus for reputation scoring."
+        }
+      ],
+      "on_completion": "step--check-sender"
+    },
+    "step--check-sender": {
+      "type": "action",
+      "name": "Check Sender Reputation",
+      "description": "Verify the sender address against known malicious sender databases.",
+      "commands": [
+        {
+          "type": "manual",
+          "command": "Check sender address against internal blocklist and external threat feeds."
+        }
+      ],
+      "on_completion": "step--is-malicious"
+    },
+    "step--is-malicious": {
+      "type": "if-condition",
+      "name": "Is Email Malicious?",
+      "description": "Evaluate gathered intelligence to determine if the email is malicious.",
+      "condition": "verdict == 'malicious'",
+      "on_true": "step--block-sender",
+      "on_false": "step--update-case-benign"
+    },
+    "step--block-sender": {
+      "type": "action",
+      "name": "Block Sender Domain",
+      "description": "Add the sender's domain to the email gateway blocklist.",
+      "commands": [
+        {
+          "type": "manual",
+          "command": "Add sender domain to Exchange Online / email gateway blocklist."
+        }
+      ],
+      "on_completion": "step--search-recipients"
+    },
+    "step--search-recipients": {
+      "type": "action",
+      "name": "Search for Other Recipients",
+      "description": "Search mail logs to identify other employees who received the same phishing email.",
+      "commands": [
+        {
+          "type": "manual",
+          "command": "Query email logs for messages from the same sender with matching subject line."
+        }
+      ],
+      "on_completion": "step--delete-emails"
+    },
+    "step--delete-emails": {
+      "type": "action",
+      "name": "Delete Phishing Emails",
+      "description": "Purge all instances of the phishing email from user mailboxes.",
+      "commands": [
+        {
+          "type": "manual",
+          "command": "Execute compliance search and purge action to remove phishing emails from all mailboxes."
+        }
+      ],
+      "on_completion": "step--end"
+    },
+    "step--update-case-benign": {
+      "type": "action",
+      "name": "Update Case - Benign",
+      "description": "Mark the case as benign and notify the reporter.",
+      "commands": [
+        {
+          "type": "manual",
+          "command": "Update case status to 'Benign' and send notification to the original reporter."
+        }
+      ],
+      "on_completion": "step--end"
+    },
+    "step--end": {
+      "type": "end",
+      "name": "End Playbook"
+    }
+  }
+}

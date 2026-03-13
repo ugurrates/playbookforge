@@ -1,0 +1,299 @@
+{
+  "type": "workflow_collections",
+  "data": [
+    {
+      "uuid": "aad5e05a-feef-402f-9db9-1f8073c15530",
+      "@type": "WorkflowCollection",
+      "name": "Phishing Email Investigation & Response",
+      "description": "Automated investigation and response workflow for reported phishing emails. Extracts IOCs, checks reputation, and takes containment actions.",
+      "visible": true,
+      "image": null,
+      "workflows": [
+        {
+          "uuid": "81e13d2d-e284-4bae-967d-15a29fe254eb",
+          "@type": "Workflow",
+          "name": "Phishing Email Investigation & Response",
+          "description": "Automated investigation and response workflow for reported phishing emails. Extracts IOCs, checks reputation, and takes containment actions.",
+          "isActive": true,
+          "debug": false,
+          "singleRecordExecution": false,
+          "priority": "/api/3/picklists/2b563c10-e7a3-4cb1-8db3-f0e7ad3c37b0",
+          "triggerStep": "dbe7a6bc-c480-4985-900e-4581b87b58c8",
+          "steps": [
+            {
+              "uuid": "dbe7a6bc-c480-4985-900e-4581b87b58c8",
+              "@type": "WorkflowStep",
+              "name": "Start Playbook",
+              "description": "",
+              "status": null,
+              "stepType": "/api/3/workflow_step_types/startStep",
+              "left": "200",
+              "top": "100",
+              "arguments": {}
+            },
+            {
+              "uuid": "c36780dc-6492-4951-8e5f-17ea6e51252c",
+              "@type": "WorkflowStep",
+              "name": "Extract Email Metadata",
+              "description": "Parse the reported email to extract sender, subject, headers, and body content.",
+              "status": null,
+              "stepType": "/api/3/workflow_step_types/executeStep",
+              "left": "500",
+              "top": "100",
+              "arguments": {
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "params": {
+                  "message": "Extract email headers, sender address, subject line, and body content from the reported phishing email."
+                }
+              }
+            },
+            {
+              "uuid": "8f5140af-54de-4e16-90e5-c5781272c5ad",
+              "@type": "WorkflowStep",
+              "name": "Extract IOCs",
+              "description": "Identify and extract all indicators of compromise from the email body and attachments.",
+              "status": null,
+              "stepType": "/api/3/workflow_step_types/executeStep",
+              "left": "800",
+              "top": "100",
+              "arguments": {
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "params": {
+                  "message": "Extract URLs, IP addresses, domain names, and file hashes from the email content and attachments."
+                }
+              }
+            },
+            {
+              "uuid": "5b0834fa-2f9c-4fc3-9957-188e8aeb3cec",
+              "@type": "WorkflowStep",
+              "name": "Check URL Reputation",
+              "description": "Query threat intelligence platforms to check reputation of extracted URLs.",
+              "status": null,
+              "stepType": "/api/3/workflow_step_types/executeStep",
+              "left": "200",
+              "top": "300",
+              "arguments": {
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "params": {
+                  "message": "Submit extracted URLs to VirusTotal and URLhaus for reputation scoring."
+                }
+              }
+            },
+            {
+              "uuid": "c1bf7f74-4eb8-4184-ac64-50e872c0b4d4",
+              "@type": "WorkflowStep",
+              "name": "Check Sender Reputation",
+              "description": "Verify the sender address against known malicious sender databases.",
+              "status": null,
+              "stepType": "/api/3/workflow_step_types/executeStep",
+              "left": "500",
+              "top": "300",
+              "arguments": {
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "params": {
+                  "message": "Check sender address against internal blocklist and external threat feeds."
+                }
+              }
+            },
+            {
+              "uuid": "3cd659d4-698a-4c02-b59b-b7d4aedd23b5",
+              "@type": "WorkflowStep",
+              "name": "Is Email Malicious?",
+              "description": "Evaluate gathered intelligence to determine if the email is malicious.",
+              "status": null,
+              "stepType": "/api/3/workflow_step_types/conditionStep",
+              "left": "800",
+              "top": "300",
+              "arguments": {
+                "conditions": [
+                  {
+                    "option": "True",
+                    "condition": "verdict == 'malicious'",
+                    "step_iri": ""
+                  },
+                  {
+                    "option": "False",
+                    "default": true,
+                    "step_iri": ""
+                  }
+                ]
+              }
+            },
+            {
+              "uuid": "7dff7553-3d51-4b1f-b3c1-daf5972d18cc",
+              "@type": "WorkflowStep",
+              "name": "Block Sender Domain",
+              "description": "Add the sender's domain to the email gateway blocklist.",
+              "status": null,
+              "stepType": "/api/3/workflow_step_types/executeStep",
+              "left": "200",
+              "top": "500",
+              "arguments": {
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "params": {
+                  "message": "Add sender domain to Exchange Online / email gateway blocklist."
+                }
+              }
+            },
+            {
+              "uuid": "f4e6a987-9f3f-41c4-8f16-a00703297c38",
+              "@type": "WorkflowStep",
+              "name": "Search for Other Recipients",
+              "description": "Search mail logs to identify other employees who received the same phishing email.",
+              "status": null,
+              "stepType": "/api/3/workflow_step_types/executeStep",
+              "left": "500",
+              "top": "500",
+              "arguments": {
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "params": {
+                  "message": "Query email logs for messages from the same sender with matching subject line."
+                }
+              }
+            },
+            {
+              "uuid": "40becc86-dc9c-487f-a899-ea2d8cd11ed3",
+              "@type": "WorkflowStep",
+              "name": "Delete Phishing Emails",
+              "description": "Purge all instances of the phishing email from user mailboxes.",
+              "status": null,
+              "stepType": "/api/3/workflow_step_types/executeStep",
+              "left": "800",
+              "top": "500",
+              "arguments": {
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "params": {
+                  "message": "Execute compliance search and purge action to remove phishing emails from all mailboxes."
+                }
+              }
+            },
+            {
+              "uuid": "be6c0250-9651-489a-a406-0ae434b1dc32",
+              "@type": "WorkflowStep",
+              "name": "Update Case - Benign",
+              "description": "Mark the case as benign and notify the reporter.",
+              "status": null,
+              "stepType": "/api/3/workflow_step_types/executeStep",
+              "left": "200",
+              "top": "700",
+              "arguments": {
+                "connector": "cyops_utilities",
+                "operation": "no_op",
+                "params": {
+                  "message": "Update case status to 'Benign' and send notification to the original reporter."
+                }
+              }
+            },
+            {
+              "uuid": "6bb885ee-9b4b-44f5-8729-c1507cc46599",
+              "@type": "WorkflowStep",
+              "name": "End Playbook",
+              "description": "",
+              "status": null,
+              "stepType": "/api/3/workflow_step_types/endStep",
+              "left": "500",
+              "top": "700",
+              "arguments": {}
+            }
+          ],
+          "routes": [
+            {
+              "uuid": "06b200cc-7255-446e-a55a-76c6f899bf83",
+              "sourceStep": "dbe7a6bc-c480-4985-900e-4581b87b58c8",
+              "targetStep": "c36780dc-6492-4951-8e5f-17ea6e51252c",
+              "label": "",
+              "isExecuted": false
+            },
+            {
+              "uuid": "93e1c4b6-6da6-41ee-ade2-9c21a0320622",
+              "sourceStep": "c36780dc-6492-4951-8e5f-17ea6e51252c",
+              "targetStep": "8f5140af-54de-4e16-90e5-c5781272c5ad",
+              "label": "",
+              "isExecuted": false
+            },
+            {
+              "uuid": "ac404e3a-fb29-45fd-a9e1-81a5d8bd693b",
+              "sourceStep": "8f5140af-54de-4e16-90e5-c5781272c5ad",
+              "targetStep": "5b0834fa-2f9c-4fc3-9957-188e8aeb3cec",
+              "label": "",
+              "isExecuted": false
+            },
+            {
+              "uuid": "0956498d-77ae-48dd-be4a-ab8332869e44",
+              "sourceStep": "5b0834fa-2f9c-4fc3-9957-188e8aeb3cec",
+              "targetStep": "c1bf7f74-4eb8-4184-ac64-50e872c0b4d4",
+              "label": "",
+              "isExecuted": false
+            },
+            {
+              "uuid": "762e408a-f94a-48ae-8427-569a2108310c",
+              "sourceStep": "c1bf7f74-4eb8-4184-ac64-50e872c0b4d4",
+              "targetStep": "3cd659d4-698a-4c02-b59b-b7d4aedd23b5",
+              "label": "",
+              "isExecuted": false
+            },
+            {
+              "uuid": "83616cc2-4ed2-4e38-baee-ff5dc79d826b",
+              "sourceStep": "3cd659d4-698a-4c02-b59b-b7d4aedd23b5",
+              "targetStep": "7dff7553-3d51-4b1f-b3c1-daf5972d18cc",
+              "label": "true",
+              "isExecuted": false
+            },
+            {
+              "uuid": "075cf55d-a45f-499d-811c-dae5cae5783e",
+              "sourceStep": "3cd659d4-698a-4c02-b59b-b7d4aedd23b5",
+              "targetStep": "be6c0250-9651-489a-a406-0ae434b1dc32",
+              "label": "false",
+              "isExecuted": false
+            },
+            {
+              "uuid": "8aa7adbf-37e5-4b29-9b02-80ae08b6cd17",
+              "sourceStep": "7dff7553-3d51-4b1f-b3c1-daf5972d18cc",
+              "targetStep": "f4e6a987-9f3f-41c4-8f16-a00703297c38",
+              "label": "",
+              "isExecuted": false
+            },
+            {
+              "uuid": "2aaaa5c4-42ad-4c03-951d-6f3430c412b5",
+              "sourceStep": "f4e6a987-9f3f-41c4-8f16-a00703297c38",
+              "targetStep": "40becc86-dc9c-487f-a899-ea2d8cd11ed3",
+              "label": "",
+              "isExecuted": false
+            },
+            {
+              "uuid": "b3b95f28-b3cf-4117-93e9-f2e1623c530f",
+              "sourceStep": "40becc86-dc9c-487f-a899-ea2d8cd11ed3",
+              "targetStep": "6bb885ee-9b4b-44f5-8729-c1507cc46599",
+              "label": "",
+              "isExecuted": false
+            },
+            {
+              "uuid": "fdc37d75-f859-4ff0-8cfa-a957b92b6b2f",
+              "sourceStep": "be6c0250-9651-489a-a406-0ae434b1dc32",
+              "targetStep": "6bb885ee-9b4b-44f5-8729-c1507cc46599",
+              "label": "",
+              "isExecuted": false
+            }
+          ],
+          "tags": [
+            "phishing",
+            "email-security",
+            "automated"
+          ],
+          "_playbookforge_metadata": {
+            "source_format": "cacao-2.0",
+            "source_id": "playbook--a]1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            "converter": "PlaybookForge"
+          }
+        }
+      ]
+    }
+  ]
+}
