@@ -2,7 +2,7 @@
   "type": "workflow_collections",
   "data": [
     {
-      "uuid": "aad5e05a-feef-402f-9db9-1f8073c15530",
+      "uuid": "3d9bf408-955f-49cb-bb70-fc789ed48c20",
       "@type": "WorkflowCollection",
       "name": "Phishing Email Investigation & Response",
       "description": "Automated investigation and response workflow for reported phishing emails. Extracts IOCs, checks reputation, and takes containment actions.",
@@ -10,7 +10,7 @@
       "image": null,
       "workflows": [
         {
-          "uuid": "81e13d2d-e284-4bae-967d-15a29fe254eb",
+          "uuid": "6d35c46a-edb8-4d64-b6a3-75bd0af6650a",
           "@type": "Workflow",
           "name": "Phishing Email Investigation & Response",
           "description": "Automated investigation and response workflow for reported phishing emails. Extracts IOCs, checks reputation, and takes containment actions.",
@@ -18,10 +18,10 @@
           "debug": false,
           "singleRecordExecution": false,
           "priority": "/api/3/picklists/2b563c10-e7a3-4cb1-8db3-f0e7ad3c37b0",
-          "triggerStep": "dbe7a6bc-c480-4985-900e-4581b87b58c8",
+          "triggerStep": "f0f70031-3bb6-4226-b579-613df4853f60",
           "steps": [
             {
-              "uuid": "dbe7a6bc-c480-4985-900e-4581b87b58c8",
+              "uuid": "f0f70031-3bb6-4226-b579-613df4853f60",
               "@type": "WorkflowStep",
               "name": "Start Playbook",
               "description": "",
@@ -32,7 +32,7 @@
               "arguments": {}
             },
             {
-              "uuid": "c36780dc-6492-4951-8e5f-17ea6e51252c",
+              "uuid": "7d06611a-0c5d-4c0a-b4b0-5ae2adcb1f6b",
               "@type": "WorkflowStep",
               "name": "Extract Email Metadata",
               "description": "Parse the reported email to extract sender, subject, headers, and body content.",
@@ -49,7 +49,7 @@
               }
             },
             {
-              "uuid": "8f5140af-54de-4e16-90e5-c5781272c5ad",
+              "uuid": "ca9a1cea-ddea-4429-8bb5-8c1a02389e7a",
               "@type": "WorkflowStep",
               "name": "Extract IOCs",
               "description": "Identify and extract all indicators of compromise from the email body and attachments.",
@@ -66,7 +66,7 @@
               }
             },
             {
-              "uuid": "5b0834fa-2f9c-4fc3-9957-188e8aeb3cec",
+              "uuid": "22ae9217-a672-46c3-9957-a8795bfcae79",
               "@type": "WorkflowStep",
               "name": "Check URL Reputation",
               "description": "Query threat intelligence platforms to check reputation of extracted URLs.",
@@ -83,7 +83,7 @@
               }
             },
             {
-              "uuid": "c1bf7f74-4eb8-4184-ac64-50e872c0b4d4",
+              "uuid": "8c58ce25-ec9a-407f-a5ea-26dbeba1cfd0",
               "@type": "WorkflowStep",
               "name": "Check Sender Reputation",
               "description": "Verify the sender address against known malicious sender databases.",
@@ -100,7 +100,7 @@
               }
             },
             {
-              "uuid": "3cd659d4-698a-4c02-b59b-b7d4aedd23b5",
+              "uuid": "6637027e-18ee-4d89-b017-1a71a2368e06",
               "@type": "WorkflowStep",
               "name": "Is Email Malicious?",
               "description": "Evaluate gathered intelligence to determine if the email is malicious.",
@@ -124,7 +124,7 @@
               }
             },
             {
-              "uuid": "7dff7553-3d51-4b1f-b3c1-daf5972d18cc",
+              "uuid": "40d589d9-f3b6-4227-b105-5bfbdc8a6b13",
               "@type": "WorkflowStep",
               "name": "Block Sender Domain",
               "description": "Add the sender's domain to the email gateway blocklist.",
@@ -141,7 +141,7 @@
               }
             },
             {
-              "uuid": "f4e6a987-9f3f-41c4-8f16-a00703297c38",
+              "uuid": "b1381de9-f2f9-400f-9d2a-c6a6988d9bc1",
               "@type": "WorkflowStep",
               "name": "Search for Other Recipients",
               "description": "Search mail logs to identify other employees who received the same phishing email.",
@@ -158,7 +158,7 @@
               }
             },
             {
-              "uuid": "40becc86-dc9c-487f-a899-ea2d8cd11ed3",
+              "uuid": "e578f39f-9b78-4d8b-8a69-8fe14aa15c46",
               "@type": "WorkflowStep",
               "name": "Delete Phishing Emails",
               "description": "Purge all instances of the phishing email from user mailboxes.",
@@ -175,7 +175,7 @@
               }
             },
             {
-              "uuid": "be6c0250-9651-489a-a406-0ae434b1dc32",
+              "uuid": "41b92c4c-c06d-4513-8727-f4cb7acd831a",
               "@type": "WorkflowStep",
               "name": "Update Case - Benign",
               "description": "Mark the case as benign and notify the reporter.",
@@ -192,7 +192,7 @@
               }
             },
             {
-              "uuid": "6bb885ee-9b4b-44f5-8729-c1507cc46599",
+              "uuid": "77eed763-108f-4389-ba2b-8ad9b22e95fc",
               "@type": "WorkflowStep",
               "name": "End Playbook",
               "description": "",
@@ -205,79 +205,79 @@
           ],
           "routes": [
             {
-              "uuid": "06b200cc-7255-446e-a55a-76c6f899bf83",
-              "sourceStep": "dbe7a6bc-c480-4985-900e-4581b87b58c8",
-              "targetStep": "c36780dc-6492-4951-8e5f-17ea6e51252c",
+              "uuid": "620c1b8f-e18a-4db5-9ba9-ca218efea8ad",
+              "sourceStep": "f0f70031-3bb6-4226-b579-613df4853f60",
+              "targetStep": "7d06611a-0c5d-4c0a-b4b0-5ae2adcb1f6b",
               "label": "",
               "isExecuted": false
             },
             {
-              "uuid": "93e1c4b6-6da6-41ee-ade2-9c21a0320622",
-              "sourceStep": "c36780dc-6492-4951-8e5f-17ea6e51252c",
-              "targetStep": "8f5140af-54de-4e16-90e5-c5781272c5ad",
+              "uuid": "b3119a5e-9e01-4117-9250-f374ae6c0189",
+              "sourceStep": "7d06611a-0c5d-4c0a-b4b0-5ae2adcb1f6b",
+              "targetStep": "ca9a1cea-ddea-4429-8bb5-8c1a02389e7a",
               "label": "",
               "isExecuted": false
             },
             {
-              "uuid": "ac404e3a-fb29-45fd-a9e1-81a5d8bd693b",
-              "sourceStep": "8f5140af-54de-4e16-90e5-c5781272c5ad",
-              "targetStep": "5b0834fa-2f9c-4fc3-9957-188e8aeb3cec",
+              "uuid": "8027aed2-da14-4f8d-8cf4-1dd07109ee5f",
+              "sourceStep": "ca9a1cea-ddea-4429-8bb5-8c1a02389e7a",
+              "targetStep": "22ae9217-a672-46c3-9957-a8795bfcae79",
               "label": "",
               "isExecuted": false
             },
             {
-              "uuid": "0956498d-77ae-48dd-be4a-ab8332869e44",
-              "sourceStep": "5b0834fa-2f9c-4fc3-9957-188e8aeb3cec",
-              "targetStep": "c1bf7f74-4eb8-4184-ac64-50e872c0b4d4",
+              "uuid": "2f45dd87-101a-4aad-b634-04cbbde2a0d9",
+              "sourceStep": "22ae9217-a672-46c3-9957-a8795bfcae79",
+              "targetStep": "8c58ce25-ec9a-407f-a5ea-26dbeba1cfd0",
               "label": "",
               "isExecuted": false
             },
             {
-              "uuid": "762e408a-f94a-48ae-8427-569a2108310c",
-              "sourceStep": "c1bf7f74-4eb8-4184-ac64-50e872c0b4d4",
-              "targetStep": "3cd659d4-698a-4c02-b59b-b7d4aedd23b5",
+              "uuid": "7cb3542d-c89c-4310-af9c-d507144968e3",
+              "sourceStep": "8c58ce25-ec9a-407f-a5ea-26dbeba1cfd0",
+              "targetStep": "6637027e-18ee-4d89-b017-1a71a2368e06",
               "label": "",
               "isExecuted": false
             },
             {
-              "uuid": "83616cc2-4ed2-4e38-baee-ff5dc79d826b",
-              "sourceStep": "3cd659d4-698a-4c02-b59b-b7d4aedd23b5",
-              "targetStep": "7dff7553-3d51-4b1f-b3c1-daf5972d18cc",
+              "uuid": "09c37ad4-c97e-4bfc-958d-3afea28799b0",
+              "sourceStep": "6637027e-18ee-4d89-b017-1a71a2368e06",
+              "targetStep": "40d589d9-f3b6-4227-b105-5bfbdc8a6b13",
               "label": "true",
               "isExecuted": false
             },
             {
-              "uuid": "075cf55d-a45f-499d-811c-dae5cae5783e",
-              "sourceStep": "3cd659d4-698a-4c02-b59b-b7d4aedd23b5",
-              "targetStep": "be6c0250-9651-489a-a406-0ae434b1dc32",
+              "uuid": "c358fe55-ea21-4ed3-9cd2-8741d5b4b368",
+              "sourceStep": "6637027e-18ee-4d89-b017-1a71a2368e06",
+              "targetStep": "41b92c4c-c06d-4513-8727-f4cb7acd831a",
               "label": "false",
               "isExecuted": false
             },
             {
-              "uuid": "8aa7adbf-37e5-4b29-9b02-80ae08b6cd17",
-              "sourceStep": "7dff7553-3d51-4b1f-b3c1-daf5972d18cc",
-              "targetStep": "f4e6a987-9f3f-41c4-8f16-a00703297c38",
+              "uuid": "72878d6f-559e-41a9-8d33-7c813f37d454",
+              "sourceStep": "40d589d9-f3b6-4227-b105-5bfbdc8a6b13",
+              "targetStep": "b1381de9-f2f9-400f-9d2a-c6a6988d9bc1",
               "label": "",
               "isExecuted": false
             },
             {
-              "uuid": "2aaaa5c4-42ad-4c03-951d-6f3430c412b5",
-              "sourceStep": "f4e6a987-9f3f-41c4-8f16-a00703297c38",
-              "targetStep": "40becc86-dc9c-487f-a899-ea2d8cd11ed3",
+              "uuid": "85887bbe-1828-4f4d-8663-fdca03dd1a48",
+              "sourceStep": "b1381de9-f2f9-400f-9d2a-c6a6988d9bc1",
+              "targetStep": "e578f39f-9b78-4d8b-8a69-8fe14aa15c46",
               "label": "",
               "isExecuted": false
             },
             {
-              "uuid": "b3b95f28-b3cf-4117-93e9-f2e1623c530f",
-              "sourceStep": "40becc86-dc9c-487f-a899-ea2d8cd11ed3",
-              "targetStep": "6bb885ee-9b4b-44f5-8729-c1507cc46599",
+              "uuid": "8ff6dad9-6577-4539-ad9a-155b449967d3",
+              "sourceStep": "e578f39f-9b78-4d8b-8a69-8fe14aa15c46",
+              "targetStep": "77eed763-108f-4389-ba2b-8ad9b22e95fc",
               "label": "",
               "isExecuted": false
             },
             {
-              "uuid": "fdc37d75-f859-4ff0-8cfa-a957b92b6b2f",
-              "sourceStep": "be6c0250-9651-489a-a406-0ae434b1dc32",
-              "targetStep": "6bb885ee-9b4b-44f5-8729-c1507cc46599",
+              "uuid": "238ebf76-f876-41b9-b5e9-6ba9de4787e8",
+              "sourceStep": "41b92c4c-c06d-4513-8727-f4cb7acd831a",
+              "targetStep": "77eed763-108f-4389-ba2b-8ad9b22e95fc",
               "label": "",
               "isExecuted": false
             }

@@ -1,14 +1,14 @@
 {
   "name": "Phishing Email Investigation & Response",
   "description": "Automated investigation and response workflow for reported phishing emails. Extracts IOCs, checks reputation, and takes containment actions.",
-  "id": "4c69bbb1-4806-4e73-8e32-2ada041093b8",
-  "start": "a7772e28-9998-490b-a816-272dfae4e4a6",
+  "id": "d1f7f768-3931-46ac-b0cc-719da5498d53",
+  "start": "03e1aef7-a634-44c1-93a4-0c55cff5bbbf",
   "org_id": "",
   "status": "test",
   "is_valid": true,
   "actions": [
     {
-      "id": "ba546548-7698-4f4c-be5d-8f3b44697ebd",
+      "id": "c4e93852-a792-4c5f-831a-c18800ba5996",
       "app_name": "Shuffle Tools",
       "app_version": "1.0.0",
       "app_id": "",
@@ -31,7 +31,7 @@
       "large_image": ""
     },
     {
-      "id": "be9344d7-ddc1-42c8-8e6d-f7b083ff0983",
+      "id": "4f0df603-875f-4d19-95fb-36d2ac6e833d",
       "app_name": "Shuffle Tools",
       "app_version": "1.0.0",
       "app_id": "",
@@ -54,7 +54,7 @@
       "large_image": ""
     },
     {
-      "id": "40d38ba6-7a35-4f85-aa71-9b58bf627f06",
+      "id": "2cc6130c-f172-4c03-8aa5-f1edd59557e1",
       "app_name": "Shuffle Tools",
       "app_version": "1.0.0",
       "app_id": "",
@@ -77,7 +77,7 @@
       "large_image": ""
     },
     {
-      "id": "42c1ef61-6a86-466c-bf08-b28077f9ba1a",
+      "id": "36467093-36f1-42fc-83b7-6ad4f2567315",
       "app_name": "Shuffle Tools",
       "app_version": "1.0.0",
       "app_id": "",
@@ -100,7 +100,7 @@
       "large_image": ""
     },
     {
-      "id": "83408f8b-eaab-447b-b98b-a5d9fcedfd3c",
+      "id": "64681235-e756-4185-879e-813e70108ed0",
       "app_name": "Shuffle Tools",
       "app_version": "1.2.0",
       "app_id": "",
@@ -123,7 +123,7 @@
       "errors": []
     },
     {
-      "id": "baf03653-ac9e-46f1-95a8-9d006eea5ae2",
+      "id": "5fbb5e54-c2e6-412a-a257-dc386b01314e",
       "app_name": "Shuffle Tools",
       "app_version": "1.0.0",
       "app_id": "",
@@ -146,7 +146,7 @@
       "large_image": ""
     },
     {
-      "id": "3b149eb5-cfed-4d88-b187-d34d8bfcaedd",
+      "id": "c564807b-aa45-4b30-bd4e-147d2196377e",
       "app_name": "Shuffle Tools",
       "app_version": "1.0.0",
       "app_id": "",
@@ -169,7 +169,7 @@
       "large_image": ""
     },
     {
-      "id": "d19ce2f5-15a3-4919-a9f7-977963865a0f",
+      "id": "a5346936-f42f-40e8-bb72-91b00061df7c",
       "app_name": "Shuffle Tools",
       "app_version": "1.0.0",
       "app_id": "",
@@ -192,7 +192,7 @@
       "large_image": ""
     },
     {
-      "id": "3cc4ce6f-065f-498b-865c-175c0c6dd1f6",
+      "id": "49841498-9c9f-4fd2-a0fb-3713208a78e2",
       "app_name": "Shuffle Tools",
       "app_version": "1.0.0",
       "app_id": "",
@@ -215,7 +215,7 @@
       "large_image": ""
     },
     {
-      "id": "07cb2caa-bacf-419d-ae9e-79c052f41b45",
+      "id": "01112056-c086-4d32-aa07-3e798ec572f5",
       "app_name": "Shuffle Tools",
       "app_version": "1.2.0",
       "app_id": "",
@@ -234,7 +234,7 @@
   ],
   "triggers": [
     {
-      "id": "a7772e28-9998-490b-a816-272dfae4e4a6",
+      "id": "03e1aef7-a634-44c1-93a4-0c55cff5bbbf",
       "name": "Start Playbook",
       "description": "Workflow trigger",
       "trigger_type": "WEBHOOK",
@@ -251,44 +251,44 @@
   ],
   "branches": [
     {
-      "id": "0a225dcb-6455-4891-ab77-2615f70c74e8",
-      "source_id": "a7772e28-9998-490b-a816-272dfae4e4a6",
-      "destination_id": "ba546548-7698-4f4c-be5d-8f3b44697ebd",
+      "id": "a41e5103-b176-4520-b199-66987f2dda0a",
+      "source_id": "03e1aef7-a634-44c1-93a4-0c55cff5bbbf",
+      "destination_id": "c4e93852-a792-4c5f-831a-c18800ba5996",
       "label": "",
       "has_errors": false
     },
     {
-      "id": "f7a84bf7-aaa5-42b4-aaa7-de69d195d97d",
-      "source_id": "ba546548-7698-4f4c-be5d-8f3b44697ebd",
-      "destination_id": "be9344d7-ddc1-42c8-8e6d-f7b083ff0983",
+      "id": "cfbc9b6b-c889-4576-8ec2-1a5dc582d8cd",
+      "source_id": "c4e93852-a792-4c5f-831a-c18800ba5996",
+      "destination_id": "4f0df603-875f-4d19-95fb-36d2ac6e833d",
       "label": "",
       "has_errors": false
     },
     {
-      "id": "444c7cd1-0306-4e11-a844-bbb5855bf40f",
-      "source_id": "be9344d7-ddc1-42c8-8e6d-f7b083ff0983",
-      "destination_id": "40d38ba6-7a35-4f85-aa71-9b58bf627f06",
+      "id": "cb140a06-b0d1-4883-9099-fff48d4ab2eb",
+      "source_id": "4f0df603-875f-4d19-95fb-36d2ac6e833d",
+      "destination_id": "2cc6130c-f172-4c03-8aa5-f1edd59557e1",
       "label": "",
       "has_errors": false
     },
     {
-      "id": "24d6ee58-a3dd-4d41-98cb-cb4c02337378",
-      "source_id": "40d38ba6-7a35-4f85-aa71-9b58bf627f06",
-      "destination_id": "42c1ef61-6a86-466c-bf08-b28077f9ba1a",
+      "id": "f05c35b6-8934-4047-8a67-eb9e71f1d820",
+      "source_id": "2cc6130c-f172-4c03-8aa5-f1edd59557e1",
+      "destination_id": "36467093-36f1-42fc-83b7-6ad4f2567315",
       "label": "",
       "has_errors": false
     },
     {
-      "id": "59592902-4b1d-4551-a351-13076d9ff074",
-      "source_id": "42c1ef61-6a86-466c-bf08-b28077f9ba1a",
-      "destination_id": "83408f8b-eaab-447b-b98b-a5d9fcedfd3c",
+      "id": "d40eee7c-0eb9-4161-95fc-76c7a31b3e96",
+      "source_id": "36467093-36f1-42fc-83b7-6ad4f2567315",
+      "destination_id": "64681235-e756-4185-879e-813e70108ed0",
       "label": "",
       "has_errors": false
     },
     {
-      "id": "18ba9f95-2534-484f-8d2e-80eeae9f7993",
-      "source_id": "83408f8b-eaab-447b-b98b-a5d9fcedfd3c",
-      "destination_id": "baf03653-ac9e-46f1-95a8-9d006eea5ae2",
+      "id": "d1af0dd1-7d1d-43c6-8f0e-3e4778020ec4",
+      "source_id": "64681235-e756-4185-879e-813e70108ed0",
+      "destination_id": "5fbb5e54-c2e6-412a-a257-dc386b01314e",
       "label": "true",
       "has_errors": false,
       "conditions": [
@@ -297,46 +297,46 @@
             "value": "verdict == 'malicious'"
           },
           "source": {
-            "id": "83408f8b-eaab-447b-b98b-a5d9fcedfd3c"
+            "id": "64681235-e756-4185-879e-813e70108ed0"
           },
           "destination": {
-            "id": "baf03653-ac9e-46f1-95a8-9d006eea5ae2"
+            "id": "5fbb5e54-c2e6-412a-a257-dc386b01314e"
           }
         }
       ]
     },
     {
-      "id": "eb83e796-c506-49fa-8d5e-e0df588e86c2",
-      "source_id": "83408f8b-eaab-447b-b98b-a5d9fcedfd3c",
-      "destination_id": "3cc4ce6f-065f-498b-865c-175c0c6dd1f6",
+      "id": "831917b1-8085-447c-8720-09446e803b88",
+      "source_id": "64681235-e756-4185-879e-813e70108ed0",
+      "destination_id": "49841498-9c9f-4fd2-a0fb-3713208a78e2",
       "label": "false",
       "has_errors": false
     },
     {
-      "id": "0439d81c-be4e-4300-96b3-7587b7684d21",
-      "source_id": "baf03653-ac9e-46f1-95a8-9d006eea5ae2",
-      "destination_id": "3b149eb5-cfed-4d88-b187-d34d8bfcaedd",
+      "id": "00583d2e-03b3-4c25-ba7f-9732236187d0",
+      "source_id": "5fbb5e54-c2e6-412a-a257-dc386b01314e",
+      "destination_id": "c564807b-aa45-4b30-bd4e-147d2196377e",
       "label": "",
       "has_errors": false
     },
     {
-      "id": "b240ab01-fdf4-4984-b856-be1fbadb3471",
-      "source_id": "3b149eb5-cfed-4d88-b187-d34d8bfcaedd",
-      "destination_id": "d19ce2f5-15a3-4919-a9f7-977963865a0f",
+      "id": "bc3624b0-a406-4060-a902-87916542884d",
+      "source_id": "c564807b-aa45-4b30-bd4e-147d2196377e",
+      "destination_id": "a5346936-f42f-40e8-bb72-91b00061df7c",
       "label": "",
       "has_errors": false
     },
     {
-      "id": "f87e0231-8572-4900-a6ff-d2fc70496946",
-      "source_id": "d19ce2f5-15a3-4919-a9f7-977963865a0f",
-      "destination_id": "07cb2caa-bacf-419d-ae9e-79c052f41b45",
+      "id": "c2a0d4f2-d696-4de5-a92c-edea867231dc",
+      "source_id": "a5346936-f42f-40e8-bb72-91b00061df7c",
+      "destination_id": "01112056-c086-4d32-aa07-3e798ec572f5",
       "label": "",
       "has_errors": false
     },
     {
-      "id": "e5d4bf82-2351-4177-bc4a-7eee9b1ffb60",
-      "source_id": "3cc4ce6f-065f-498b-865c-175c0c6dd1f6",
-      "destination_id": "07cb2caa-bacf-419d-ae9e-79c052f41b45",
+      "id": "789fd28a-be70-4e14-9075-3eab9b1e7035",
+      "source_id": "49841498-9c9f-4fd2-a0fb-3713208a78e2",
+      "destination_id": "01112056-c086-4d32-aa07-3e798ec572f5",
       "label": "",
       "has_errors": false
     }
